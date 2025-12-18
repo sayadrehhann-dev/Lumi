@@ -1,0 +1,5 @@
+{
+  "name": "AI Student Companion",
+  "description": "An adaptive, intelligent student mentor that personalizes learning, identifies gaps, and helps with revision strategies using the Gemini API.",
+  "requestFramePermissions": []
+}
