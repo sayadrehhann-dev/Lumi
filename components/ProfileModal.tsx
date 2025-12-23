@@ -3,15 +3,16 @@ import { UserProfile } from '../types';
 
 interface ProfileModalProps {
   isOpen: boolean;
+  onClose?: () => void;
   onSubmit: (profile: UserProfile) => void;
-  initialProfile?: UserProfile;
+  initialProfile?: UserProfile | null;
 }
 
-const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onSubmit, initialProfile }) => {
+const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, onSubmit, initialProfile }) => {
   const [name, setName] = useState(initialProfile?.name || '');
   const [educationLevel, setEducationLevel] = useState(initialProfile?.educationLevel || '');
   const [majorSubject, setMajorSubject] = useState(initialProfile?.majorSubject || '');
-  const [learningGoal, setLearningGoal] = useState(initialProfile?.learningGoal || '');
+  const [learningGoal, setLearningGoal] = useState(initialProfile?.learningGoal || 'Understand Deeply');
   const [difficultyLevel, setDifficultyLevel] = useState(initialProfile?.difficultyLevel || 'Beginner');
 
   if (!isOpen) return null;
@@ -24,97 +25,93 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onSubmit, initialPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
-        <div className="bg-indigo-600 px-6 py-4">
-          <h2 className="text-white text-xl font-bold flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.499 5.516 51.33 51.33 0 00-2.658.813m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
-            </svg>
-            Student Profile
-          </h2>
-          <p className="text-indigo-100 text-sm mt-1">Help me tailor my teaching to your needs.</p>
+    <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-xl z-[200] flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden relative border border-slate-100 dark:border-white/10 animate-fade-in">
+        <div className="bg-mint-500 px-8 py-10 text-center">
+          <h2 className="text-slate-950 text-3xl font-black uppercase italic tracking-tight">My Profile</h2>
+          <p className="text-slate-950/60 text-[10px] font-black uppercase tracking-widest mt-1">Update your learning settings</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-              placeholder="e.g. Alex"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="p-8 space-y-6 max-h-[70vh] overflow-y-auto scrollbar-hide">
+          <div className="space-y-4">
+            <FormGroup label="Your Name">
+              <input type="text" required className="modal-input" placeholder="Alex" value={name} onChange={e => setName(e.target.value)} />
+            </FormGroup>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Education Level</label>
-              <select
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white"
-                value={educationLevel}
-                onChange={(e) => setEducationLevel(e.target.value)}
-              >
-                <option value="">Select Level</option>
-                <option value="Middle School">Middle School</option>
-                <option value="High School">High School / GCSE</option>
-                <option value="Undergraduate">Undergraduate</option>
-                <option value="Postgraduate">Postgraduate</option>
-                <option value="Professional">Professional</option>
-              </select>
+            <div className="grid grid-cols-2 gap-4">
+              <FormGroup label="School Level">
+                <select className="modal-input" value={educationLevel} onChange={e => setEducationLevel(e.target.value)}>
+                  <option value="Middle School">Middle School</option>
+                  <option value="High School">High School</option>
+                  <option value="College">College</option>
+                  <option value="Expert">Advanced</option>
+                </select>
+              </FormGroup>
+              <FormGroup label="Difficulty">
+                <select className="modal-input" value={difficultyLevel} onChange={e => setDifficultyLevel(e.target.value)}>
+                  <option value="Beginner">Easy</option>
+                  <option value="Intermediate">Normal</option>
+                  <option value="Advanced">Hard</option>
+                </select>
+              </FormGroup>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
-              <select
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white"
-                value={difficultyLevel}
-                onChange={(e) => setDifficultyLevel(e.target.value)}
-              >
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
+            <FormGroup label="What are you studying?">
+              <input type="text" required className="modal-input" placeholder="e.g. Science" value={majorSubject} onChange={e => setMajorSubject(e.target.value)} />
+            </FormGroup>
+
+            <FormGroup label="Main Goal">
+              <select className="modal-input" value={learningGoal} onChange={e => setLearningGoal(e.target.value)}>
+                <option value="Understand Deeply">Understand Deeply</option>
+                <option value="Prepare for Exams">Prepare for Exams</option>
+                <option value="Quick Review">Quick Review</option>
+                <option value="Master the Topic">Master the Topic</option>
               </select>
-            </div>
+            </FormGroup>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Subject of Interest / Major</label>
-            <input
-              type="text"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-              placeholder="e.g. Computer Science, History, Physics"
-              value={majorSubject}
-              onChange={(e) => setMajorSubject(e.target.value)}
-            />
+          <div className="flex gap-4 pt-4">
+            {onClose && (
+              <button type="button" onClick={onClose} className="flex-1 px-6 py-4 bg-slate-100 dark:bg-white/5 text-slate-500 rounded-2xl font-bold uppercase tracking-widest text-[10px]">
+                Cancel
+              </button>
+            )}
+            <button type="submit" className="flex-[2] bg-mint-500 hover:bg-mint-400 text-slate-950 font-black py-4 px-6 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest text-[10px]">
+              Save Changes
+            </button>
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Learning Goal (Optional)</label>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-              placeholder="e.g. Prepare for finals, Learn intuitively"
-              value={learningGoal}
-              onChange={(e) => setLearningGoal(e.target.value)}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-md active:transform active:scale-[0.98]"
-          >
-            Start Learning Session
-          </button>
         </form>
       </div>
+      <style>{`
+        .modal-input {
+          width: 100%;
+          padding: 1rem 1.25rem;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 1rem;
+          outline: none;
+          font-weight: 700;
+          font-size: 0.875rem;
+          transition: border-color 0.2s;
+        }
+        .dark .modal-input {
+          background: #020617;
+          border-color: #1e293b;
+          color: white;
+        }
+        .modal-input:focus {
+          border-color: #10b981;
+        }
+      `}</style>
     </div>
   );
 };
+
+const FormGroup = ({ label, children }: any) => (
+  <div className="space-y-2">
+    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
+    {children}
+  </div>
+);
 
 export default ProfileModal;

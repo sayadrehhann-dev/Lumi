@@ -1,4 +1,5 @@
-export type AppView = 'landing' | 'auth' | 'dashboard' | 'chat' | 'viva';
+
+export type AppView = 'landing' | 'auth' | 'dashboard' | 'chat' | 'viva' | 'infographic';
 
 export interface ActivityEvent {
   id: string;
@@ -33,4 +34,20 @@ export interface Message {
   content: string;
   timestamp: number;
   isThinking?: boolean;
+  imageUrl?: string;
+}
+
+export interface VivaTurn {
+  id: string;
+  role: 'me' | 'lumi';
+  text: string;
+  timestamp: number;
+}
+
+export interface VivaSession {
+  id: string;
+  timestamp: number;
+  subject: string;
+  difficulty: string;
+  transcript: VivaTurn[];
 }

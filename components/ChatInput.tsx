@@ -41,7 +41,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type your query or response here..."
+            placeholder="Illuminate your thoughts here..."
             className="w-full bg-transparent border-none focus:ring-0 resize-none max-h-[120px] min-h-[50px] py-3.5 px-5 text-slate-800 placeholder:text-slate-400 font-medium leading-relaxed"
             rows={1}
             disabled={isLoading}
@@ -63,7 +63,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
         </div>
       </div>
       <div className="mt-3 text-center">
-        <span className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.2em] leading-none">Powered by ELI Advanced Pedagogy</span>
+        <span className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.2em] leading-none">Powered by Lumi Luminous Logic</span>
       </div>
     </div>
   );

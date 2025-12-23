@@ -2,124 +2,129 @@ import React from 'react';
 
 interface LandingPageProps {
   onStart: () => void;
+  onToggleTheme: () => void;
+  isDarkMode: boolean;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onStart, onToggleTheme, isDarkMode }) => {
   return (
-    <div className="bg-white min-h-screen flex flex-col items-center overflow-hidden">
-      {/* Hero Section */}
-      <section className="relative w-full max-w-7xl px-8 pt-24 pb-16 flex flex-col lg:flex-row items-center justify-between gap-12 z-10">
-        <div className="flex-1 text-center lg:text-left animate-slide-up">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-mint-50 border border-mint-100 text-mint-600 text-[10px] font-bold uppercase tracking-widest mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-mint-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-mint-500"></span>
-            </span>
-            Next-Gen Learning Intelligence
+    <div className="bg-lumi-slate-50 dark:bg-lumi-slate-950 min-h-screen flex flex-col items-center overflow-x-hidden font-sans text-slate-900 dark:text-white transition-all duration-500">
+      <div className="fixed inset-0 noise z-0"></div>
+      
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full max-w-7xl px-4 sm:px-8 py-6 flex justify-between items-center z-[100]">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-mint-500/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-mint-600 dark:text-mint-400 font-black border border-mint-500/30 shadow-xl shadow-mint-500/10">
+            L
           </div>
-          <h1 className="text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6">
-            Your Intelligent <br/> 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-mint-500 to-teal-500">Study Companion</span>
+          <span className="text-xl font-black tracking-tight">Lumi</span>
+        </div>
+        <button 
+          onClick={onToggleTheme} 
+          className="p-3 rounded-2xl bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl shadow-sm hover:scale-105 active:scale-95 transition-all"
+        >
+          {isDarkMode ? "☀️" : "🌙"}
+        </button>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative w-full max-w-7xl px-4 sm:px-8 pt-32 sm:pt-48 pb-16 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 z-10">
+        <div className="flex-1 text-center lg:text-left animate-slide-up">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-mint-500/10 border border-mint-500/30 text-mint-600 dark:text-mint-400 text-[10px] font-black uppercase tracking-widest mb-6">
+            <span className="w-2 h-2 bg-mint-500 rounded-full animate-pulse"></span>
+            Smart Learning Buddy v5.0
+          </div>
+          
+          <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black text-slate-900 dark:text-white leading-[1.0] mb-8 tracking-tighter">
+            Learn with <br/> 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-mint-500 via-teal-500 to-blue-600 animate-glow-line bg-[length:200%_auto]">Clarity.</span>
           </h1>
-          <p className="text-lg text-slate-500 max-w-lg mb-10 leading-relaxed">
-            ELI Engine adapts to your cognitive patterns, identifies knowledge gaps, and optimizes your learning journey in real-time.
+          
+          <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0 font-medium">
+            Lumi is your smart study partner. It finds what you're stuck on and helps you understand it easily.
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+          
+          <div className="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start">
             <button 
               onClick={onStart}
-              className="px-8 py-4 bg-mint-500 text-white font-bold rounded-2xl shadow-xl shadow-mint-100 hover:bg-mint-600 hover:-translate-y-1 transition-all active:scale-95"
+              className="w-full sm:w-auto px-10 py-5 bg-mint-500 text-slate-950 font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-mint-500/30 hover:bg-mint-400 hover:-translate-y-1 transition-all active:scale-95"
             >
-              Start Learning Now
+              Get Started
             </button>
-            <button className="px-8 py-4 bg-white text-slate-700 font-bold rounded-2xl border border-slate-200 hover:bg-slate-50 transition-all">
-              Watch Demo
-            </button>
+            <div className="flex flex-col border-l-2 border-slate-200 dark:border-white/10 pl-4 text-left">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Powered by</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white">Smart Gemini Tech</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex-1 relative animate-fade-in delay-300">
-          <div className="relative z-10 p-8 glass border border-white/40 rounded-[2.5rem] shadow-2xl animate-float">
-            <div className="bg-white rounded-2xl p-6 shadow-sm mb-4 border border-slate-100">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-10 h-10 rounded-full bg-mint-100 flex items-center justify-center text-mint-600 font-bold text-lg">AI</div>
-                <div>
-                  <div className="h-2 w-32 bg-slate-100 rounded-full mb-1"></div>
-                  <div className="h-2 w-20 bg-slate-50 rounded-full"></div>
+        {/* Card Mockup - restored animate-float and animate-scale-in */}
+        <div className="flex-1 w-full max-w-md lg:max-w-none relative animate-scale-in delay-300">
+          <div className="p-8 sm:p-12 bg-white/40 dark:bg-slate-900/40 backdrop-blur-3xl border border-slate-200 dark:border-white/5 rounded-[3rem] shadow-2xl animate-float">
+            <div className="bg-white dark:bg-slate-950 rounded-[2.5rem] p-6 sm:p-8 shadow-inner border border-slate-100 dark:border-white/5 space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-mint-500/20 backdrop-blur-lg flex items-center justify-center text-mint-600 dark:text-mint-400 font-black border border-mint-500/30">L</div>
+                  <div>
+                    <div className="h-2 w-24 bg-slate-100 dark:bg-slate-800 rounded-full mb-2"></div>
+                    <div className="h-1.5 w-16 bg-slate-50 dark:bg-slate-900 rounded-full"></div>
+                  </div>
+                </div>
+                <div className="flex gap-1.5">
+                  <div className="w-1.5 h-1.5 bg-mint-500 rounded-full animate-pulse"></div>
+                  <div className="w-1.5 h-1.5 bg-mint-500 rounded-full animate-pulse [animation-delay:0.2s]"></div>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="h-3 w-full bg-slate-50 rounded-lg"></div>
-                <div className="h-3 w-full bg-slate-50 rounded-lg"></div>
-                <div className="h-3 w-3/4 bg-slate-50 rounded-lg"></div>
+              <div className="space-y-4">
+                <div className="h-2.5 w-full bg-slate-50 dark:bg-slate-900 rounded-full"></div>
+                <div className="h-2.5 w-3/4 bg-slate-50 dark:bg-slate-900 rounded-full"></div>
               </div>
-              <div className="mt-6 flex justify-end">
-                <div className="px-4 py-2 bg-mint-50 text-mint-600 text-xs font-bold rounded-xl border border-mint-100">Analyzing Gaps...</div>
-              </div>
-            </div>
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-teal-50/50 rounded-2xl p-4 border border-teal-100/50">
-                <div className="text-xl font-bold text-teal-700 leading-none">84%</div>
-                <div className="text-[10px] text-teal-600 uppercase font-bold mt-1">Retention Boost</div>
-              </div>
-              <div className="bg-sea-50 rounded-2xl p-4 border border-sea-100/50">
-                <div className="text-xl font-bold text-sea-500 leading-none">2.4x</div>
-                <div className="text-[10px] text-sea-400 uppercase font-bold mt-1">Faster Mastery</div>
+              <div className="pt-4 flex justify-between items-end">
+                <div>
+                  <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Learning Score</div>
+                  <div className="text-4xl font-black text-mint-500">98%</div>
+                </div>
+                <div className="px-4 py-2 bg-mint-500/10 text-mint-600 rounded-xl text-[9px] font-black uppercase tracking-widest border border-mint-500/20">Active</div>
               </div>
             </div>
           </div>
-          {/* Background Blobs */}
-          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-mint-100 rounded-full blur-3xl opacity-40 animate-pulse"></div>
-          <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-teal-100 rounded-full blur-3xl opacity-40"></div>
+          {/* Subtle glow orb behind the card */}
+          <div className="absolute -top-10 -right-10 w-64 h-64 bg-mint-500/10 dark:bg-mint-500/20 rounded-full blur-[80px] pointer-events-none"></div>
         </div>
       </section>
 
-      {/* Feature Section */}
-      <section className="w-full max-w-7xl px-8 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <FeatureCard 
-            icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>}
-            title="Adaptive Pedagogical Modeling"
-            description="Dynamic content adjustment based on real-time cognitive state inference."
-            color="mint"
-          />
-          <FeatureCard 
-            icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v1.607a2 2 0 01-.586 1.414l-.494.494a2 2 0 00-.586 1.414v.637a2 2 0 01-.586 1.414l-.494.494a2 2 0 00-.586 1.414v.637a2 2 0 01-.586 1.414l-.494.494a2 2 0 00-.586 1.414v1.607a2 2 0 01-.586 1.414l-.494.494a2 2 0 00-.586 1.414v.637a2 2 0 01-.586 1.414l-.494.494a2 2 0 00-.586 1.414v.637a2 2 0 01-.586 1.414l-.494.494a2 2 0 00-.586 1.414v1.607" /></svg>}
-            title="Structural Prerequisite Graph"
-            description="ELI identifies broken foundations and re-solidifies them before moving forward."
-            color="teal"
-          />
-          <FeatureCard 
-            icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>}
-            title="AI Viva Mode"
-            description="Challenge your knowledge with our strict yet supportive AI Oral Examiner."
-            color="sea"
-          />
-        </div>
+      {/* Features */}
+      <section className="w-full max-w-7xl px-4 sm:px-8 py-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 z-10">
+        <FeatureCard 
+          icon="🗣️"
+          title="Voice Help"
+          description="Talk to Lumi! It listens to how you explain things to see if you really understand."
+        />
+        <FeatureCard 
+          icon="🗺️"
+          title="Personal Map"
+          description="See exactly which topics you know well and which ones need more work."
+        />
+        <FeatureCard 
+          icon="🖼️"
+          title="Visual Aids"
+          description="Turn boring text into beautiful pictures and charts to learn faster."
+        />
       </section>
 
-      {/* Footer Decoration */}
-      <footer className="w-full h-24 bg-gradient-to-t from-slate-50 to-transparent"></footer>
+      <footer className="w-full py-12 border-t border-slate-200 dark:border-white/5 flex flex-col items-center gap-4 bg-white/30 dark:bg-slate-900/30 backdrop-blur-xl">
+        <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Lumi Smart Assistant • 2025</div>
+      </footer>
     </div>
   );
 };
 
-const FeatureCard = ({ icon, title, description, color }: any) => {
-  const colorMap: any = {
-    mint: 'bg-mint-50 text-mint-600 border-mint-100',
-    teal: 'bg-teal-50 text-teal-600 border-teal-100',
-    sea: 'bg-sea-50 text-sea-500 border-sea-100',
-  };
-
-  return (
-    <div className="p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all group">
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${colorMap[color]}`}>
-        {icon}
-      </div>
-      <h3 className="text-xl font-bold text-slate-800 mb-3">{title}</h3>
-      <p className="text-slate-500 text-sm leading-relaxed">{description}</p>
-    </div>
-  );
-};
+const FeatureCard = ({ icon, title, description }: any) => (
+  <div className="p-10 rounded-[2.5rem] bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+    <div className="text-4xl mb-6">{icon}</div>
+    <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">{title}</h3>
+    <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-medium">{description}</p>
+  </div>
+);
 
 export default LandingPage;

@@ -1,5 +1,7 @@
 {
-  "name": "AI Student Companion",
-  "description": "An adaptive, intelligent student mentor that personalizes learning, identifies gaps, and helps with revision strategies using the Gemini API.",
-  "requestFramePermissions": []
+  "name": "Lumi",
+  "description": "An adaptive, intelligent student mentor that illuminates learning paths, identifies gaps, and personalizes revision strategies using the Gemini API.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
 }

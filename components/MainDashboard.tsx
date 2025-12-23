@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserProfile, ConceptMastery } from '../types';
 
 interface MainDashboardProps {
@@ -8,85 +8,106 @@ interface MainDashboardProps {
 }
 
 const MainDashboard: React.FC<MainDashboardProps> = ({ profile, history, onAction }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const avgMastery = history.length > 0 
     ? Math.round(history.reduce((acc, curr) => acc + curr.mastery, 0) / history.length) 
     : 0;
 
-  const masteredCount = history.filter(h => h.mastery >= 80).length;
-
   return (
-    <div className="h-full overflow-y-auto bg-slate-50/50 p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Welcome Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 animate-slide-up">
-          <div>
-            <h2 className="text-3xl font-black text-slate-900 mb-1">Welcome back, {profile.name}!</h2>
-            <p className="text-slate-500 font-medium">You're making great progress in <span className="text-mint-600 font-bold">{profile.majorSubject}</span>.</p>
+    <div className="h-full overflow-y-auto bg-lumi-slate-50 dark:bg-lumi-slate-950 p-4 sm:p-8 lg:p-12 scrollbar-hide text-slate-900 dark:text-white transition-all">
+      <div className="max-w-7xl mx-auto space-y-10 sm:space-y-16">
+        
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 animate-slide-up">
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+               <div className="w-2 h-2 bg-mint-500 rounded-full animate-pulse shadow-lg"></div>
+               <span className="text-[10px] font-black text-mint-600 dark:text-mint-400 uppercase tracking-widest">Lumi is Active</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-none">
+              Hi, <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-slate-900 dark:from-white to-slate-400">{profile.name}</span>
+            </h2>
+            <div className="flex flex-wrap items-center gap-4 text-slate-500 font-bold uppercase text-[10px] tracking-widest">
+              <span>Goal: {profile.learningGoal}</span>
+              <span className="w-1 h-1 bg-slate-300 rounded-full hidden sm:block"></span>
+              <span>Focus: {profile.majorSubject}</span>
+            </div>
           </div>
-          <div className="flex gap-4">
-            <button 
-              onClick={() => onAction('chat')}
-              className="px-6 py-3 bg-mint-500 text-white font-bold rounded-2xl shadow-xl shadow-mint-100 hover:bg-mint-600 transition-all flex items-center gap-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M4.848 2.771A49.144 49.144 0 0112 2.25c2.43 0 4.817.178 7.152.521 1.282.188 2.228 1.311 2.228 2.599 0 4.31-.692 8.455-1.983 12.332a.75.75 0 01-1.054.437l-4.226-2.02a.75.75 0 01-.41-.754l.32-3.795a.75.75 0 00-.614-.806 28.528 28.528 0 00-6.83 0 .75.75 0 00-.614.806l.32 3.795a.75.75 0 01-.41.754l-4.226 2.02a.75.75 0 01-1.054-.437A49.145 49.145 0 012.62 5.37c0-1.288.946-2.411 2.228-2.599z" clipRule="evenodd" /></svg>
-              Start Session
-            </button>
-            <button 
-              onClick={() => onAction('viva')}
-              className="px-6 py-3 bg-white text-slate-700 font-bold rounded-2xl border border-slate-200 hover:bg-slate-50 transition-all flex items-center gap-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M7 3.5A1.5 1.5 0 018.5 2h7A1.5 1.5 0 0117 3.5v17a1.5 1.5 0 01-1.5 1.5h-7A1.5 1.5 0 017 20.5v-17z" /><path d="M4.5 4.5A1.5 1.5 0 016 3h12a1.5 1.5 0 011.5 1.5v15a1.5 1.5 0 01-1.5 1.5H6a1.5 1.5 0 01-1.5-1.5v-15z" /></svg>
-              AI Viva
-            </button>
+          
+          <div className="flex flex-wrap gap-4 w-full md:w-auto">
+             <div className="p-1.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex gap-1.5 w-full sm:w-auto shadow-xl">
+                <HubBtn 
+                  onClick={() => onAction('chat')} 
+                  label="Chat Helper" 
+                  active 
+                />
+                <HubBtn 
+                  onClick={() => onAction('viva')} 
+                  label="Talk to Lumi" 
+                />
+             </div>
+             <button 
+                onClick={() => onAction('infographic')}
+                className="w-full sm:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-[2rem] hover:scale-105 active:scale-95 transition-all shadow-xl"
+              >
+                Create Images
+              </button>
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <StatCard 
-            title="Knowledge Coverage" 
+        {/* Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
+          <StatBox 
+            title="Clarity Score" 
             value={`${avgMastery}%`} 
-            subtitle={`${history.length} Concepts Tracked`} 
+            desc="Your understanding level"
             color="mint"
-            icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>}
+            icon="✨"
           />
-          <StatCard 
-            title="Focus Areas" 
-            value={`${history.filter(h => h.mastery < 50).length}`} 
-            subtitle="Immediate Attention Required" 
+          <StatBox 
+            title="Things to Review" 
+            value={`${history.filter(h => h.mastery < 60).length}`} 
+            desc="Topics that need work"
             color="amber"
-            icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>}
+            icon="🔍"
           />
-          <StatCard 
-            title="ELI Prediction" 
-            value="Strong" 
-            subtitle="72h Retention Stability" 
-            color="teal"
-            icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg>}
+          <StatBox 
+            title="Study Progress" 
+            value={avgMastery >= 60 ? "GREAT" : "STABLE"} 
+            desc="Your current pace"
+            color="blue"
+            icon="🚀"
           />
         </div>
 
-        {/* Next Actions & Recent Mastery */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="glass border border-white/50 rounded-[2.5rem] p-8 shadow-sm">
-            <h3 className="text-xl font-bold text-slate-800 mb-6">Suggested Learning Path</h3>
+        {/* Action List */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
+          <div className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-[3rem] p-8 sm:p-10 shadow-xl space-y-8">
+            <div className="flex justify-between items-center border-b border-slate-100 dark:border-white/5 pb-4">
+              <h3 className="text-sm font-black text-mint-600 dark:text-mint-400 uppercase tracking-widest">Recommended Topics</h3>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Start Here</span>
+            </div>
             <div className="space-y-4">
               {history.length === 0 ? (
-                <div className="text-center py-10 text-slate-400 font-medium italic">
-                  Complete your first session to generate a path.
-                </div>
+                <div className="text-center py-12 text-slate-400 italic font-bold">Ask Lumi a question to start!</div>
               ) : (
-                history.filter(h => h.mastery < 80).slice(0, 3).map((h, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-mint-200 transition-colors group">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-mint-50 rounded-xl flex items-center justify-center text-mint-600 font-bold">{idx + 1}</div>
+                history.filter(h => h.mastery < 85).slice(0, 4).map((h, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-white/5 rounded-[2rem] hover:scale-[1.02] transition-all group">
+                    <div className="flex items-center gap-5">
+                      <div className="w-10 h-10 bg-mint-500 rounded-xl flex items-center justify-center text-slate-950 font-black">{idx + 1}</div>
                       <div>
-                        <div className="font-bold text-slate-800">{h.concept}</div>
-                        <div className="text-[10px] text-slate-400 uppercase font-bold">Priority: High</div>
+                        <div className="font-black text-slate-900 dark:text-white text-xl tracking-tight">{h.concept}</div>
+                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{h.mastery}% Clear</div>
                       </div>
                     </div>
-                    <button onClick={() => onAction('chat')} className="p-2 rounded-lg bg-mint-500 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z" clipRule="evenodd" /></svg>
+                    <button onClick={() => onAction('chat')} className="p-3 bg-mint-500 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/></svg>
                     </button>
                   </div>
                 ))
@@ -94,27 +115,13 @@ const MainDashboard: React.FC<MainDashboardProps> = ({ profile, history, onActio
             </div>
           </div>
 
-          <div className="glass border border-white/50 rounded-[2.5rem] p-8 shadow-sm">
-            <h3 className="text-xl font-bold text-slate-800 mb-6">Retention Overview</h3>
-            <div className="flex flex-col items-center justify-center h-full pb-8">
-              {history.length === 0 ? (
-                <div className="text-slate-300 text-4xl mb-4 italic">No Data</div>
-              ) : (
-                <div className="w-full space-y-6">
-                  {history.slice(0, 5).map((h, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
-                        <span>{h.concept}</span>
-                        <span>{h.mastery}%</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-mint-500 transition-all duration-1000" style={{ width: `${h.mastery}%` }}></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+          <div className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-[3rem] p-8 sm:p-10 shadow-xl flex flex-col justify-center items-center text-center space-y-6">
+             <div className="text-5xl">🎨</div>
+             <h3 className="text-2xl font-black tracking-tight">Image Study Tool</h3>
+             <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xs mx-auto">Turn your notes into easy diagrams and pictures with Lumi's smart image engine.</p>
+             <button onClick={() => onAction('infographic')} className="px-10 py-4 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:border-mint-500 transition-all">
+                Open Image Lab
+             </button>
           </div>
         </div>
       </div>
@@ -122,22 +129,32 @@ const MainDashboard: React.FC<MainDashboardProps> = ({ profile, history, onActio
   );
 };
 
-const StatCard = ({ title, value, subtitle, color, icon }: any) => {
-  const colorMap: any = {
-    mint: 'bg-mint-50 text-mint-600 border-mint-100',
-    teal: 'bg-teal-50 text-teal-600 border-teal-100',
-    amber: 'bg-amber-50 text-amber-600 border-amber-100',
-  };
+const HubBtn = ({ onClick, label, active }: any) => (
+  <button 
+    onClick={onClick}
+    className={`flex-1 py-3 px-6 rounded-[1.75rem] font-black uppercase tracking-widest text-[10px] transition-all whitespace-nowrap ${
+      active ? 'bg-mint-500 text-slate-950 shadow-lg scale-105' : 'text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+    }`}
+  >
+    {label}
+  </button>
+);
 
+const StatBox = ({ title, value, desc, color, icon }: any) => {
+  const colors: any = {
+    mint: 'bg-mint-500/10 text-mint-600 border-mint-500/20',
+    blue: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+    amber: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+  };
   return (
-    <div className="glass border border-white/50 rounded-[2.5rem] p-8 shadow-sm flex items-center gap-6 hover:-translate-y-1 transition-all">
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${colorMap[color]}`}>
+    <div className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-[3rem] p-10 shadow-xl flex items-center gap-8 group hover:-translate-y-1 transition-all">
+      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shrink-0 border-2 transition-transform group-hover:scale-110 ${colors[color]}`}>
         {icon}
       </div>
       <div>
         <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{title}</div>
-        <div className="text-3xl font-black text-slate-900 leading-none">{value}</div>
-        <div className="text-xs text-slate-400 font-medium mt-1">{subtitle}</div>
+        <div className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">{value}</div>
+        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">{desc}</div>
       </div>
     </div>
   );
